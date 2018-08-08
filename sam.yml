@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM Template.
+
+Parameters:
+  FunctionName:
+    Type: String
+    Default: Func
+  SNSTopic:
+    Type: String
+    Default: Topic
+  SlackWebhookUrl:
+    Type: String
+    Default: ''
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: General Configuration
+        Parameters:
+          - FunctionName
+          - SNSTopic
+    ParameterLabels:
+      FunctionName:
+        default: PostSlackFromSNS
+      SNSTopic:
+        default: PostSlackFromSNS
+
+Resources:
+  Function:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      CodeUri: src
+      Handler: index.handler
+      Runtime: nodejs8.10
+      FunctionName: !Sub ${AWS::StackName}-${FunctionName}
+      Description: Post to Slack from Amazon SNS
+      MemorySize: 128
+      Timeout: 10
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Environment:
+        Variables:
+          SLACK_WEBHOOK_URL: !Ref SlackWebhookUrl
+      Events: 
+        SNS:
+          Type: SNS
+          Properties:
+            Topic: !Ref Topic
+      Tags:
+        Key: 'Value'
+  Topic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      TopicName: !Sub ${AWS::StackName}-${SNSTopic}
+
+Outputs:
+  FunctionName:
+    Description: API Endpoint
+    Value: !Ref FunctionName
+  TopicName:
+    Description: API Endpoint
+    Value: !Ref SNSTopic

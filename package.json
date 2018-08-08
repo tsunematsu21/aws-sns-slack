@@ -1,0 +1,16 @@
+{
+  "name": "aws-sns-slack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/tsunematsu21/aws-sns-slack",
+  "author": "tsunematsu21 <tsunematsu21@users.noreply.github.com>",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint src/*",
+    "package": "aws cloudformation package --template-file sam.yml --output-template-file sam.packaged.yml",
+    "deploy": "aws cloudformation deploy --template-file sam.packaged.yml --capabilities CAPABILITY_IAM"
+  },
+  "devDependencies": {
+    "eslint": "^5.3.0"
+  }
+}

@@ -59,3 +59,8 @@ typings/
 
 # next.js build output
 .next
+
+# VSCode settings
+.vscode
+
+pipeline.json
